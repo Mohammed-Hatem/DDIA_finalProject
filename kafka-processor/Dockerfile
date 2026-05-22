@@ -6,12 +6,10 @@ COPY weather-station weather-station
 COPY central-station central-station
 COPY kafka-processor kafka-processor
 COPY open-meteo-integration open-meteo-integration
-RUN mvn -pl central-station -am clean package -DskipTests
+RUN mvn -pl kafka-processor -am clean package -DskipTests
 
 # Run stage
 FROM eclipse-temurin:17-jre
 WORKDIR /app
-COPY --from=build /app/central-station/target/central-station-1.0-SNAPSHOT.jar app.jar
-# To profile with JFR for 60 seconds:
-#   ENTRYPOINT ["java", "-XX:StartFlightRecording=duration=60s,filename=/data/recording.jfr", "-jar", "app.jar"]
+COPY --from=build /app/kafka-processor/target/kafka-processor-1.0-SNAPSHOT.jar app.jar
 ENTRYPOINT ["java", "-jar", "app.jar"]

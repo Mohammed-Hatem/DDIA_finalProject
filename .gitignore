@@ -1,0 +1,23 @@
+# Build output
+**/target/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.project
+.classpath
+.settings/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Data directories (created at runtime)
+data/
+
+# BitCask client output
+*.csv
+
+# JFR recordings
+*.jfr

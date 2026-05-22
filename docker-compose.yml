@@ -1,21 +1,27 @@
-version: '3'
+version: '3.8'
+
 services:
+  # ───────────── Infrastructure ─────────────
   zookeeper:
-    image: bitnami/zookeeper:latest
+    image: confluentinc/cp-zookeeper:7.5.0
     ports:
       - "2181:2181"
     environment:
-      - ALLOW_ANONYMOUS_LOGIN=yes
-  
+      - ZOOKEEPER_CLIENT_PORT=2181
+      - ZOOKEEPER_TICK_TIME=2000
+
   kafka:
-    image: bitnami/kafka:latest
+    image: confluentinc/cp-kafka:7.5.0
     ports:
-      - "9092:9092"
+      - "9092:29092"
     environment:
-      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
-      - ALLOW_PLAINTEXT_LISTENER=yes
-      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092
-      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092
+      - KAFKA_BROKER_ID=1
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:9092
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      - KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092,PLAINTEXT_HOST://0.0.0.0:29092
+      - KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
     depends_on:
       - zookeeper
 
@@ -24,8 +30,11 @@ services:
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ports:
       - "9200:9200"
+    volumes:
+      - es-data:/usr/share/elasticsearch/data
 
   kibana:
     image: docker.elastic.co/kibana/kibana:8.10.2
@@ -35,3 +44,156 @@ services:
       - "5601:5601"
     depends_on:
       - elasticsearch
+
+  # ───────────── Application ─────────────
+  central-station:
+    build:
+      context: .
+      dockerfile: central-station/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - BITCASK_DIR=/data/bitcask
+      - PARQUET_DIR=/data/parquet
+    volumes:
+      - shared-data:/data
+    depends_on:
+      - kafka
+
+  rain-detector:
+    build:
+      context: .
+      dockerfile: kafka-processor/Dockerfile
+    environment:
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    depends_on:
+      - kafka
+
+  parquet-shipper:
+    build:
+      context: parquet-shipper
+      dockerfile: Dockerfile
+    environment:
+      - ES_HOST=http://elasticsearch:9200
+      - PARQUET_DIR=/data/parquet
+      - STATE_FILE=/data/parquet_shipper_state.txt
+    volumes:
+      - shared-data:/data
+    depends_on:
+      - elasticsearch
+      - central-station
+
+  open-meteo-integration:
+    build:
+      context: .
+      dockerfile: open-meteo-integration/Dockerfile
+    environment:
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    depends_on:
+      - kafka
+
+  # 10 weather stations
+  weather-station-1:
+    build:
+      context: .
+      dockerfile: weather-station/Dockerfile
+    environment:
+      - STATION_ID=1
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    depends_on:
+      - kafka
+
+  weather-station-2:
+    build:
+      context: .
+      dockerfile: weather-station/Dockerfile
+    environment:
+      - STATION_ID=2
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    depends_on:
+      - kafka
+
+  weather-station-3:
+    build:
+      context: .
+      dockerfile: weather-station/Dockerfile
+    environment:
+      - STATION_ID=3
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    depends_on:
+      - kafka
+
+  weather-station-4:
+    build:
+      context: .
+      dockerfile: weather-station/Dockerfile
+    environment:
+      - STATION_ID=4
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    depends_on:
+      - kafka
+
+  weather-station-5:
+    build:
+      context: .
+      dockerfile: weather-station/Dockerfile
+    environment:
+      - STATION_ID=5
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    depends_on:
+      - kafka
+
+  weather-station-6:
+    build:
+      context: .
+      dockerfile: weather-station/Dockerfile
+    environment:
+      - STATION_ID=6
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    depends_on:
+      - kafka
+
+  weather-station-7:
+    build:
+      context: .
+      dockerfile: weather-station/Dockerfile
+    environment:
+      - STATION_ID=7
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    depends_on:
+      - kafka
+
+  weather-station-8:
+    build:
+      context: .
+      dockerfile: weather-station/Dockerfile
+    environment:
+      - STATION_ID=8
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    depends_on:
+      - kafka
+
+  weather-station-9:
+    build:
+      context: .
+      dockerfile: weather-station/Dockerfile
+    environment:
+      - STATION_ID=9
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    depends_on:
+      - kafka
+
+  weather-station-10:
+    build:
+      context: .
+      dockerfile: weather-station/Dockerfile
+    environment:
+      - STATION_ID=10
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    depends_on:
+      - kafka
+
+volumes:
+  shared-data:
+  es-data:
