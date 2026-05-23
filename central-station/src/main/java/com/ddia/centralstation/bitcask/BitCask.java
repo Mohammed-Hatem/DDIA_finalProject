@@ -86,7 +86,7 @@ public class BitCask {
         }
     }
 
-    // ─────────────── Public API ───────────────
+    // Public API
 
     /** Store or update a key-value pair. */
     public void put(String key, String value) {
@@ -168,7 +168,7 @@ public class BitCask {
         return Collections.unmodifiableSet(keyDir.keySet());
     }
 
-    // ─────────────── Active File Management ───────────────
+    // Active file management
 
     private void ensureActiveFile() throws IOException {
         if (activeFile == null) {
@@ -211,7 +211,7 @@ public class BitCask {
         return maxId + 1;
     }
 
-    // ─────────────── Recovery ───────────────
+    // Recovery
 
     /**
      * Recover the in-memory keyDir from hint files (fast) and segment files.
@@ -322,7 +322,7 @@ public class BitCask {
         }
     }
 
-    // ─────────────── Compaction ───────────────
+    // Compaction
 
     /**
      * Merge old (non-active) segments into a single compacted segment.
@@ -336,7 +336,7 @@ public class BitCask {
             List<Integer> oldIds = getOldSegmentIds();
             if (oldIds.isEmpty()) return;
 
-            System.out.println("[BitCask] Compaction started — merging " + oldIds.size() + " segments");
+            System.out.println("[BitCask] Compaction started, merging " + oldIds.size() + " segments");
 
             // Collect latest values for keys that live in old segments
             Map<String, String> latestValues = new LinkedHashMap<>();
@@ -391,7 +391,7 @@ public class BitCask {
                 Files.deleteIfExists(Path.of(hintPath(oldId)));
             }
 
-            System.out.println("[BitCask] Compaction done — compacted into segment_" + compactedId);
+            System.out.println("[BitCask] Compaction done, compacted into segment_" + compactedId);
         } catch (IOException e) {
             System.err.println("[BitCask] Compaction error: " + e.getMessage());
         } finally {
@@ -423,7 +423,7 @@ public class BitCask {
         }
     }
 
-    // ─────────────── Helpers ───────────────
+    // Helpers
 
     private String segmentPath(int id) {
         return directory + File.separator + SEGMENT_PREFIX + id;

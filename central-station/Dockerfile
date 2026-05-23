@@ -12,6 +12,7 @@ RUN mvn -pl central-station -am clean package -DskipTests
 FROM eclipse-temurin:17-jre
 WORKDIR /app
 COPY --from=build /app/central-station/target/central-station-1.0-SNAPSHOT.jar app.jar
-# To profile with JFR for 60 seconds:
-#   ENTRYPOINT ["java", "-XX:StartFlightRecording=duration=60s,filename=/data/recording.jfr", "-jar", "app.jar"]
+COPY central-station/jfr-io.jfc /app/jfr-io.jfc
+
+# Normal run. For JFR profiling use docker-compose.jfr.yml or scripts/record-jfr.sh
 ENTRYPOINT ["java", "-jar", "app.jar"]

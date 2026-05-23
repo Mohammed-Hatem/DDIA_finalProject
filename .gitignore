@@ -21,3 +21,15 @@ data/
 
 # JFR recordings
 *.jfr
+
+_helper/*
+!_helper/*.md
+!_helper/report-assets/.gitkeep
+
+.Untitled
+
+report/
+scripts/
+
+.cursor/
+.claude/

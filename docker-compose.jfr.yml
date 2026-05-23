@@ -1,0 +1,11 @@
+# Profiling override: JFR profile template + small Parquet batches so File I/O appears in 60s.
+# Usage: docker compose -f docker-compose.yml -f docker-compose.jfr.yml up --build -d central-station
+services:
+  central-station:
+    environment:
+      - PARQUET_BATCH_SIZE=100
+    entrypoint:
+      - java
+      - -XX:StartFlightRecording=duration=60s,filename=/data/recording.jfr,settings=/app/jfr-io.jfc
+      - -jar
+      - app.jar

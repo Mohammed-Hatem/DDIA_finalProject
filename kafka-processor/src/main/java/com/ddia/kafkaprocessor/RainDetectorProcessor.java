@@ -74,8 +74,8 @@ public class RainDetectorProcessor {
                                         + "\"timestamp\":%d}",
                                 stationId, humidity, timestamp);
 
-                        System.out.println("🌧 Rain detected! Station " + stationId
-                                + " humidity=" + humidity + "%");
+                        System.out.println("[RainDetector] RAIN_DETECTED station="
+                                + stationId + " humidity=" + humidity + "%");
                         return alert;
                     } catch (Exception e) {
                         return value;

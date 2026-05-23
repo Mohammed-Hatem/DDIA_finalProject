@@ -1,8 +1,6 @@
 #!/bin/bash
 
-# ──────────────────────────────────────────────────────────────
-# BitCask Client — CLI to interact with the Central Station API
-# ──────────────────────────────────────────────────────────────
+# BitCask Client - CLI for Central Station REST API
 
 CENTRAL_STATION_URL="${CENTRAL_STATION_URL:-http://localhost:8080}"
 
@@ -53,7 +51,7 @@ elif [ "$1" == "--perf" ] && [[ "$2" == --clients=* ]]; then
         (
             FILE_NAME="${TIMESTAMP}_thread_${i}.csv"
             fetch_all_to_csv "${FILE_NAME}"
-            echo "Thread ${i} done → ${FILE_NAME}"
+            echo "Thread ${i} done -> ${FILE_NAME}"
         ) &
     done
 

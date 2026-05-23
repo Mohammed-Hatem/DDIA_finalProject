@@ -59,7 +59,7 @@ public class ParquetArchiver {
     @PostConstruct
     public void init() {
         new File(parquetDir).mkdirs();
-        System.out.println("[ParquetArchiver] Initialized — dir=" + parquetDir
+        System.out.println("[ParquetArchiver] Initialized dir=" + parquetDir
                 + " batchSize=" + batchSize);
     }
 

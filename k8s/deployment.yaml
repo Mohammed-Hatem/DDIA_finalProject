@@ -3,7 +3,7 @@ kind: Namespace
 metadata:
   name: weather-monitoring
 ---
-# ───────────── Shared Storage ─────────────
+# Shared Storage
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -16,7 +16,7 @@ spec:
     requests:
       storage: 2Gi
 ---
-# ───────────── Zookeeper ─────────────
+# Zookeeper
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -55,7 +55,7 @@ spec:
   selector:
     app: zookeeper
 ---
-# ───────────── Kafka ─────────────
+# Kafka
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -102,7 +102,7 @@ spec:
   selector:
     app: kafka
 ---
-# ───────────── ElasticSearch ─────────────
+# ElasticSearch
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -143,7 +143,7 @@ spec:
   selector:
     app: elasticsearch
 ---
-# ───────────── Kibana ─────────────
+# Kibana
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -181,7 +181,7 @@ spec:
   selector:
     app: kibana
 ---
-# ───────────── Central Station ─────────────
+# Central Station
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -231,7 +231,7 @@ spec:
   selector:
     app: central-station
 ---
-# ───────────── Rain Detector Processor ─────────────
+# Rain Detector (kafka-processor module)
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -255,7 +255,7 @@ spec:
             - name: KAFKA_BOOTSTRAP_SERVERS
               value: kafka:9092
 ---
-# ───────────── Parquet Shipper ─────────────
+# Parquet Shipper
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -290,7 +290,7 @@ spec:
           persistentVolumeClaim:
             claimName: shared-pvc
 ---
-# ───────────── Open-Meteo Integration ─────────────
+# Open-Meteo Integration
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -314,7 +314,7 @@ spec:
             - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
               value: kafka:9092
 ---
-# ───────────── Weather Stations (1–10) ─────────────
+# Weather Stations (1-10)
 apiVersion: apps/v1
 kind: Deployment
 metadata:

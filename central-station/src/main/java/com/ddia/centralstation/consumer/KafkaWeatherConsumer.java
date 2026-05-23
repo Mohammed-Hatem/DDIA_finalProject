@@ -53,7 +53,7 @@ public class KafkaWeatherConsumer {
         consumerThread = new Thread(this::consume, "kafka-weather-consumer");
         consumerThread.setDaemon(true);
         consumerThread.start();
-        System.out.println("[KafkaConsumer] Started — topic=" + topic + " broker=" + bootstrapServers);
+        System.out.println("[KafkaConsumer] Started topic=" + topic + " broker=" + bootstrapServers);
     }
 
     @PreDestroy
@@ -84,7 +84,7 @@ public class KafkaWeatherConsumer {
                         // Archive all messages (including drop markers) to Parquet/ES
                         parquetArchiver.archive(msg);
 
-                        // Drop markers are not latest station readings — skip BitCask update
+                        // el drop marker mesh latest reading - skip BitCask update
                         if (msg.isMessageDropped()) {
                             continue;
                         }
