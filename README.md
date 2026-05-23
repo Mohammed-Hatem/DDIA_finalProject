@@ -1,10 +1,8 @@
 # Weather Stations Monitoring System
 
-**Alexandria University - DDIA Course Project (CSE-4E3)**
+**Alexandria University - DDIA Course Project**
 
 A distributed weather monitoring system built with Kafka, BitCask Riak, Parquet, ElasticSearch, and Kubernetes.
-
-**Lab runbook:** [_helper/getStart.md](_helper/getStart.md)
 
 ## Architecture
 
@@ -57,8 +55,6 @@ DDIA_finalProject/
 | `open-meteo-integration` | `open-meteo-integration` |
 
 ## Project Report
-
-Report bundle: **[report/README.md](report/README.md)**
 
 Optional ES stats (stack running; index appears after first Parquet batch ~17 min):
 
