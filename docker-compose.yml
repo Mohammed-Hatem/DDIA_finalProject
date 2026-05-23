@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  # ───────────── Infrastructure ─────────────
+  # Infrastructure
   zookeeper:
     image: confluentinc/cp-zookeeper:7.5.0
     ports:
@@ -45,7 +45,7 @@ services:
     depends_on:
       - elasticsearch
 
-  # ───────────── Application ─────────────
+  # Application
   central-station:
     build:
       context: .

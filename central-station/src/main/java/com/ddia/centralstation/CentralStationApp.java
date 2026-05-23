@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
- * Central Station — the heart of the weather monitoring system.
+ * Central Station: consumes Kafka, BitCask latest state, Parquet archive, REST API.
  *
  * Responsibilities:
  *   1. Consume weather status messages from Kafka

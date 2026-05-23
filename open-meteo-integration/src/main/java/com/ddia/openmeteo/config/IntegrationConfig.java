@@ -13,7 +13,6 @@ import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.integration.dsl.MessageChannels;
 import org.springframework.integration.dsl.Pollers;
 import org.springframework.integration.handler.advice.IdempotentReceiverInterceptor;
-import org.springframework.integration.http.inbound.HttpRequestHandlingMessagingGateway;
 import org.springframework.integration.kafka.outbound.KafkaProducerMessageHandler;
 import org.springframework.integration.metadata.ConcurrentMetadataStore;
 import org.springframework.integration.metadata.SimpleMetadataStore;
@@ -70,7 +69,7 @@ public class IntegrationConfig {
         return new SimpleMetadataStore();
     }
 
-    // 5. Idempotent Receiver — one metadata entry per s_no
+    // 5. Idempotent Receiver - one metadata entry per s_no
     @Bean
     public IdempotentReceiverInterceptor idempotentReceiverInterceptor() {
         MetadataStoreSelector selector = new MetadataStoreSelector(
